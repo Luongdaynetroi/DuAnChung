@@ -139,7 +139,7 @@
         let timeouts = [];
         const totalTime = 491; // 8:11 in seconds
         const numParagraphs = paragraphs.length;
-        const interval = totalTime / numParagraphs; // ~15.8s per paragraph
+        const interval = 5000; // 5s per paragraph
         function startHighlighting() {
             timeouts = [];
             paragraphs.forEach((p, index) => {
