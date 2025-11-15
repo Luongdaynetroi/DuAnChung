@@ -133,43 +133,32 @@
     <button id="playMusicBtn" style="position: fixed; bottom: 20px; right: 20px; padding: 10px; background: #d32f2f; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 16px;">🔊</button>
     <script>
         const paragraphs = document.querySelectorAll('.container p');
-        paragraphs.forEach((p, index) => {
-            p.style.animationDelay = `${index * 0.3}s`;
-        });
-
         const audio = document.getElementById('bgMusic');
         const playBtn = document.getElementById('playMusicBtn');
         let isPlaying = false;
-        let highlightInterval;
-
-        function highlightParagraph(index) {
-            paragraphs.forEach((p, i) => {
-                if (i === index) {
-                    p.style.backgroundColor = 'yellow';
-                    p.style.color = 'red';
-                } else {
-                    p.style.backgroundColor = '';
-                    p.style.color = '';
-                }
+        let timeouts = [];
+        const totalTime = 491; // 8:11 in seconds
+        const numParagraphs = paragraphs.length;
+        const interval = totalTime / numParagraphs; // ~15.8s per paragraph
+        function startHighlighting() {
+            timeouts = [];
+            paragraphs.forEach((p, index) => {
+                const timeout = setTimeout(() => {
+                    for (let i = 0; i <= index; i++) {
+                        paragraphs[i].style.backgroundColor = 'yellow';
+                        paragraphs[i].style.color = 'red';
+                    }
+                }, index * interval * 1000);
+                timeouts.push(timeout);
             });
         }
-
-        function startHighlighting() {
-            let currentIndex = 0;
-            highlightInterval = setInterval(() => {
-                highlightParagraph(currentIndex);
-                currentIndex = (currentIndex + 1) % paragraphs.length;
-            }, 5000); // Thay đổi mỗi 5 giây, có thể điều chỉnh theo lời bài hát
-        }
-
         function stopHighlighting() {
-            clearInterval(highlightInterval);
+            timeouts.forEach(clearTimeout);
             paragraphs.forEach(p => {
                 p.style.backgroundColor = '';
                 p.style.color = '';
             });
         }
-
         playBtn.addEventListener('click', () => {
             if (isPlaying) {
                 audio.pause();
@@ -177,7 +166,7 @@
                 isPlaying = false;
                 stopHighlighting();
             } else {
-                audio.play();
+                // audio.play(); // Comment out to test without audio
                 playBtn.textContent = '🔇';
                 isPlaying = true;
                 startHighlighting();
