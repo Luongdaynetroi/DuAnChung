@@ -144,10 +144,15 @@
             timeouts = [];
             paragraphs.forEach((p, index) => {
                 const timeout = setTimeout(() => {
-                    for (let i = 0; i <= index; i++) {
-                        paragraphs[i].style.backgroundColor = 'yellow';
-                        paragraphs[i].style.color = 'red';
-                    }
+                    paragraphs.forEach((par, i) => {
+                        if (i === index) {
+                            par.style.backgroundColor = 'yellow';
+                            par.style.color = 'red';
+                        } else {
+                            par.style.backgroundColor = '';
+                            par.style.color = '';
+                        }
+                    });
                 }, index * interval * 1000);
                 timeouts.push(timeout);
             });
@@ -159,6 +164,10 @@
                 p.style.color = '';
             });
         }
+        // Auto start highlighting on load
+        window.addEventListener('load', () => {
+            startHighlighting();
+        });
         playBtn.addEventListener('click', () => {
             if (isPlaying) {
                 audio.pause();
