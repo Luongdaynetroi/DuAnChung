@@ -133,52 +133,23 @@
     <button id="playMusicBtn" style="position: fixed; bottom: 20px; right: 20px; padding: 10px; background: #d32f2f; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 16px;">🔊</button>
     <script>
         const paragraphs = document.querySelectorAll('.container p');
+        paragraphs.forEach((p, index) => {
+            p.style.animationDelay = `${index * 0.3}s`;
+        });
+
         const audio = document.getElementById('bgMusic');
         const playBtn = document.getElementById('playMusicBtn');
         let isPlaying = false;
-        let timeouts = [];
-        const totalTime = 491; // 8:11 in seconds
-        const numParagraphs = paragraphs.length;
-        const interval = 5000; // 5s per paragraph
-        function startHighlighting() {
-            timeouts = [];
-            paragraphs.forEach((p, index) => {
-                const timeout = setTimeout(() => {
-                    paragraphs.forEach((par, i) => {
-                        if (i === index) {
-                            par.style.backgroundColor = 'yellow';
-                            par.style.color = 'red';
-                        } else {
-                            par.style.backgroundColor = '';
-                            par.style.color = '';
-                        }
-                    });
-                }, index * interval * 1000);
-                timeouts.push(timeout);
-            });
-        }
-        function stopHighlighting() {
-            timeouts.forEach(clearTimeout);
-            paragraphs.forEach(p => {
-                p.style.backgroundColor = '';
-                p.style.color = '';
-            });
-        }
-        // Auto start highlighting on load
-        window.addEventListener('load', () => {
-            startHighlighting();
-        });
+
         playBtn.addEventListener('click', () => {
             if (isPlaying) {
                 audio.pause();
                 playBtn.textContent = '🔊';
                 isPlaying = false;
-                stopHighlighting();
             } else {
-                // audio.play(); // Comment out to test without audio
+                audio.play();
                 playBtn.textContent = '🔇';
                 isPlaying = true;
-                startHighlighting();
             }
         });
     </script>
